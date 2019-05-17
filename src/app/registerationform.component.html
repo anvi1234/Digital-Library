@@ -1,0 +1,50 @@
+<meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="icon" type="image/x-icon" href="favicon.ico">
+
+<mat-card class="mat-card" style="margin: 15px;"fxFlex="40%;" fxFlex.xs="80%">
+        <div mat-card-content style="max-height: 500px; overflow-y: auto" >
+<form  #f="ngForm" (ngSubmit)="save()">
+    <div class="container">
+      <h1>Register</h1>
+      <p>Please fill in this form to register your book.</p>
+      <hr>
+      <mat-form-field appearance="legacy">
+            <mat-label>Name</mat-label>
+            <input matInput placeholder="your name" name="name" #name="ngModel" [(ngModel)]="library.name">
+            <mat-icon matSuffix>sentiment_very_satisfied</mat-icon>
+             </mat-form-field><br>
+             <mat-form-field appearance="legacy">
+                    <mat-label>Contact</mat-label>
+                    <input matInput placeholder="9876543211" name="contact" #contact="ngModel" [(ngModel)]="library.contact">
+                    <mat-icon matSuffix>sentiment_very_satisfied</mat-icon>
+                     </mat-form-field><br>
+                     <mat-form-field appearance="legacy">
+                            <mat-label>Book Name</mat-label>
+                            <input matInput placeholder="Eng.Mathematics" name="book" #book="ngModel" [(ngModel)]="library.book">
+                            <mat-icon matSuffix>sentiment_very_satisfied</mat-icon>
+                             </mat-form-field><br>
+                             <mat-form-field appearance="legacy">
+                                    <mat-label>Course Name</mat-label>
+                                    <input matInput placeholder="Mathematics/Computer Science" name="course" #course="ngModel" [(ngModel)]="library.course">
+                                    <mat-icon matSuffix>sentiment_very_satisfied</mat-icon>
+                                     </mat-form-field><br>
+                                     <mat-form-field appearance="legacy">
+                                            <mat-label>Writer's Name</mat-label>
+                                            <input matInput placeholder="R.D Sharma" name="writer" #writer="ngModel" [(ngModel)]="library.writer" >
+                                            <mat-icon matSuffix>sentiment_very_satisfied</mat-icon>
+                                             </mat-form-field>
+                                            
+      <hr>
+      <p>By creating an account you agree to our <a href="#">Terms & Privacy</a>.</p>
+  
+      <button type="submit" class="btn btn-danger" (click)="onNoClick()">No Thanks</button>
+      <button type="submit" class="btn btn-success">Register</button>
+    </div>
+    
+    <div class="container signin">
+      <p>Already have an account? <a href="#">Sign in</a>.</p>
+    </div>
+  </form>
+  </div>
+  </mat-card>
+  
