@@ -1,4 +1,4 @@
-import { Component,OnInit ,Inject, ViewChild, AfterViewInit} from '@angular/core';
+import { Component,OnInit ,Inject, ViewChild, AfterViewInit, Input, HostListener, OnDestroy, Output, EventEmitter} from '@angular/core';
 import { NgbCarouselConfig } from '@ng-bootstrap/ng-bootstrap';
 import {MatDialog, MatDialogRef, MAT_DIALOG_DATA} from '@angular/material';
 
@@ -6,6 +6,7 @@ import{LibraryService} from "./service/user.service";
 import{Router} from "@angular/router";
 import {MatSort, MatTableDataSource} from '@angular/material';
 import { libraryObject } from './user.model';
+import { Subscription } from 'rxjs';
 
 export interface userData {
   name: string;
@@ -22,25 +23,19 @@ export interface userData {
   styleUrls: ['./app.component.css'],
   providers:[LibraryService],
 })
-export class AppComponent implements OnInit,AfterViewInit {
-  userData = [];
-  displayedColumns: string[] = ['course', 'book', 'writer', 'name','contact'];
+export class AppComponent implements OnInit,OnDestroy {
+
+ userData: userData[];
+  
   User:libraryObject=new libraryObject();
 
-  public dataSource = new MatTableDataSource(this.userData);
  
-         @ViewChild(MatSort) sort: MatSort;
-
 
 
   title = 'libraryapp';
  
   public image
-  
-  
-  
-
-constructor(config: NgbCarouselConfig,public dialog: MatDialog, public service:LibraryService) {
+  constructor(config: NgbCarouselConfig,public dialog: MatDialog, public service:LibraryService) {
   // customize default val ues of carousels used by this component tree
   config.interval=2000;
   config.wrap = true;
@@ -50,8 +45,36 @@ constructor(config: NgbCarouselConfig,public dialog: MatDialog, public service:L
   this.getvalue();
 } 
 
+@Input("sortable-column")
+columnName:string = '';
+@Input('sort-direction')
+sortDirection: string = '';
+@Output()
+    sorted = new EventEmitter();
+
+private columnSortedSubscription: Subscription;
+@HostListener('click')
+    Onsort() {
+        this.sortDirection = this.sortDirection === 'asc' ? 'desc' : 'asc';
+        this.service.columnSorted({sortColumn: this.columnName, sortDirection: this.sortDirection });
+    
+    }
+
+
+
+
 ngOnInit(){
 
+  this.columnSortedSubscription = this.service.columnSorted$.subscribe(event => {
+    // reset this column's sort direction to hide the sort icons
+    if (this.columnName != event.sortColumn) {
+        this.sortDirection = '';
+    }
+});
+
+this.columnSortedSubscription = this.service.columnSorted$.subscribe(event => {
+  this.sorted.emit(event);
+});
   this.image=[
   "assets/image/image1.jpg",
   "assets/image/image2.jpg",
@@ -66,9 +89,7 @@ this.getvalue();
 
 }
 
-ngAfterViewInit(): void{
-  this.dataSource.sort = this.sort;
-}
+
 
 getvalue() {
   this.service.getAllData().subscribe(x => {
@@ -93,7 +114,9 @@ openDialog(): void {
   });
 }
 
-
+ngOnDestroy() {
+  this.columnSortedSubscription.unsubscribe();
+}
 
 }
 

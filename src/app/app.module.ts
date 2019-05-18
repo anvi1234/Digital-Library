@@ -68,7 +68,7 @@ export const routes:Routes=[
 
 @NgModule({
   declarations: [
-    AppComponent,RegisterComponent, RegisterationComponent,
+    AppComponent,RegisterComponent, RegisterationComponent
   ],
   imports: [
     BrowserModule,CommonModule,FormsModule,MatInputModule,MatButtonModule,MatAutocompleteModule,CdkTreeModule, ScrollingModule, A11yModule,
